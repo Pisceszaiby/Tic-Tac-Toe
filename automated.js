@@ -6,10 +6,9 @@ let movesLeft = []
 let solution = false;
 let move;
 function leftMoves(array) {
-    for (var i = 0; i < 9; i++) {
+    for (var i = 0; i < 9; i++)
         if (!(turns.includes(i)))
             array.push(i)
-    }
 }
 function genRandom(array) {
     return array[Math.floor(Math.random() * array.length)];
@@ -21,12 +20,10 @@ function solutionCheck() {
         if (checker(userMoves, winMoves[i])) {
             document.getElementById("turn").innerHTML = "User Wins!!";
             solution = true;
-            break;
         }
         else if (checker(compMoves, winMoves[i])) {
             document.getElementById("turn").innerHTML = "Computer Wins!!";
             solution = true;
-            break;
         }
     }
     if (solution) {
@@ -37,9 +34,8 @@ function solutionCheck() {
             document.getElementById(movesLeft[p].toString()).style.color = "#8041BF";
         }
     }
-    else if (solution == false && turns.length === 9) {
+    else if (solution == false && turns.length === 9)
         document.getElementById("turn").innerHTML = "Game Tied"
-    }
 }
 function calMatchingValues(array1, array) {
     let matchingArray = []
@@ -50,10 +46,9 @@ function calMatchingValues(array1, array) {
     }
 }
 function splicing(array1, possible, values) {
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 8; i++)
         if (values[i] === 2)
             possible.push(winMoves[i])
-    }
     for (var i = 0; i < possible.length; i++) {
         for (var j = 0; j < 3; j++) {
             if ((array1.includes(possible[i][j]))) {
@@ -80,6 +75,12 @@ function checkCorner() {
     if (approvedCorners.length === 0)
         move = genRandom(movesLeft)
 }
+function selection(newArray, possible, array1) {
+    newArray = genRandom(possible);
+    newArray = newArray.sort()
+    array1 = array1.sort()
+    move = newArray.filter(x => !array1.includes(x))[0]
+}
 function compMove() {
     movesLeft = []
     let possibleMoves = []
@@ -97,31 +98,21 @@ function compMove() {
         calMatchingValues(userMoves, matchingValues)
         if (matchingValues.includes(2)) {
             splicing(compMoves, possibleMoves, matchingValues)
-            if (possibleMoves.length > 0) {
-                newMove = genRandom(possibleMoves);
-                newMove = newMove.sort()
-                userMoves = userMoves.sort()
-                move = newMove.filter(x => !userMoves.includes(x))[0]
-            }
-            else {
+            if (possibleMoves.length > 0)
+                selection(newMove, possibleMoves, userMoves)
+            else
                 checkCorner()
-            }
         }
-        else {
+        else
             checkCorner()
-        }
     }
     else if (turns.length > 4) {
         leftMoves(movesLeft)
         calMatchingValues(compMoves, matchingValues)
         if (matchingValues.includes(2)) {
             splicing(userMoves, possibleMoves, matchingValues)
-            if (possibleMoves.length > 0) {
-                newMove = genRandom(possibleMoves);
-                newMove = newMove.sort()
-                compMoves = compMoves.sort()
-                move = newMove.filter(x => !compMoves.includes(x))[0]
-            }
+            if (possibleMoves.length > 0)
+                selection(newMove, possibleMoves, compMoves)
             else {
                 movesLeft = []
                 matchingValues = []
@@ -135,24 +126,17 @@ function compMove() {
                 }
                 if (matchingValues.includes(2)) {
                     splicing(compMoves, possibleMoves, matchingValues)
-                    if (possibleMoves.length > 0) {
-                        newMove = genRandom(possibleMoves);
-                        newMove = newMove.sort()
-                        userMoves = userMoves.sort()
-                        move = newMove.filter(x => !userMoves.includes(x))[0]
-                    }
-                    else {
+                    if (possibleMoves.length > 0)
+                        selection(newMove, possibleMoves, userMoves)
+                    else
                         checkCorner()
-                    }
                 }
-                else {
+                else
                     checkCorner()
-                }
             }
         }
-        else {
+        else
             checkCorner()
-        }
     }
     compMoves.push(move)
     turns.push(move);
